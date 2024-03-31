@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyConfigFiles", 
-    version="0.0.1",
+    version="0.0.2",
     author="Richard Peschke",
     author_email="peschke@hawaii.edu",
     description="",

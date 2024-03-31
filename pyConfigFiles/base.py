@@ -59,7 +59,7 @@ class LockAttributesMeta(type):
 
 class base(metaclass=LockAttributesMeta):
     def __init__(self) -> None:
-        self.__files__ = {}
+        self.__files__ = []
 
     def __setattr__(self, key, value):
         if getattr(self, '_locked', False) and not hasattr(self, key):
@@ -67,14 +67,27 @@ class base(metaclass=LockAttributesMeta):
         super().__setattr__(key, value)
 
     def add_modules(self, files):
+        fs = {}
+        caller_frame = inspect.currentframe().f_back
+        # Extract the file path from the frame
+        file_path = caller_frame.f_code.co_filename
+        directory_path = os.path.dirname(file_path)
+        print(directory_path)
         for f in files:
             l.clear()
-            import_from_filepath(f)
-            self.__files__[f] = l.copy()
+            new_path = os.path.join(directory_path, f)
+            if new_path in  self.__files__: 
+                continue
+            self.__files__.append(new_path)
+            import_from_filepath(new_path)
+            fs[new_path] = l.copy()
             l.clear()
 
-        for file in self.__files__.keys():
-            for fun in self.__files__[file]:
+        for file in fs.keys():
+            for fun in fs[file]:
                 fun(self)
+
+        
+         
 
 
