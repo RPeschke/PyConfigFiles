@@ -1,7 +1,12 @@
 # pyConfigFiles
 
 ## Purpose
+
 The primary purpose of this library is to facilitate the creation of complex configuration files that cannot be efficiently or effectively described using conventional formats like CSV or JSON. While it retains the capability to manage simpler configurations, its design is specifically tailored for handling sophisticated setups, akin to those required in build systems. This makes it an ideal tool for developers who need to manage intricate configurations in their projects.
+
+This library offers the flexibility to define configuration values that range from simple data types, like numbers and strings, to complex entities such as entire functions. This capability is particularly useful for scenarios where dynamic behavior is required as part of the configuration. For instance, consider the custom scripts in the .git/hooks directory, which are essentially bash scripts executed in response to specific git events. With our library, these could be seamlessly integrated into a single pyConfigFile, allowing for the writing of hook scripts directly in Python. This not only provides the convenience of maintaining configurations and executable scripts in one place but also leverages the full power of Python's extensive functionality for these injected functions, enabling more sophisticated and powerful configuration possibilities.
+
+
 
 ## Features
 

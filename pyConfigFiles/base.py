@@ -4,6 +4,18 @@ import base64
 import inspect
 import os
 
+
+import hashlib
+
+def calculate_hash(file_path):
+    hash_algo = hashlib.sha256()  # You can use other algorithms like SHA-1, MD5, etc.
+    with open(file_path, 'rb') as file:
+        # Read the file in chunks to avoid memory issues with large files
+        for chunk in iter(lambda: file.read(4096), b''):
+            hash_algo.update(chunk)
+    return hash_algo.hexdigest()
+
+
 l = []
 
 def add_function(name, function):
@@ -26,6 +38,7 @@ def configuration(func):
 
 
 def import_from_filepath(filepath):
+    l.clear()
     # Extract module name from filepath
     module_name = filepath.split('/')[-1].split('.')[0]
    
@@ -40,8 +53,9 @@ def import_from_filepath(filepath):
    
     # Execute the module (run its code)
     spec.loader.exec_module(module)
-   
-    return module
+    ret = l.copy()
+    l.clear()
+    return ret
 
 
 
@@ -71,17 +85,18 @@ class base(metaclass=LockAttributesMeta):
         caller_frame = inspect.currentframe().f_back
         # Extract the file path from the frame
         file_path = caller_frame.f_code.co_filename
+        
         directory_path = os.path.dirname(file_path)
-        print(directory_path)
+
         for f in files:
-            l.clear()
+
             new_path = os.path.join(directory_path, f)
-            if new_path in  self.__files__: 
+            file_hash =  calculate_hash(new_path) 
+            if file_hash in  self.__files__: 
                 continue
-            self.__files__.append(new_path)
-            import_from_filepath(new_path)
-            fs[new_path] = l.copy()
-            l.clear()
+            fs[new_path] =  import_from_filepath(new_path)
+            self.__files__.append(file_hash)
+
 
         for file in fs.keys():
             for fun in fs[file]:

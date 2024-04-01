@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyConfigFiles", 
-    version="0.0.2",
+    version="0.0.4",
     author="Richard Peschke",
     author_email="peschke@hawaii.edu",
     description="",
-    long_description="long_description",
+    long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/RPeschke/PyConfigFiles",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
